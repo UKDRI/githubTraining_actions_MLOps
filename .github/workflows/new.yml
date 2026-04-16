@@ -1,0 +1,53 @@
+name: Template for retraining models
+
+on:
+  push: 
+    branches: ["**"]
+    paths: 
+      - "data/**"
+
+  schedule:
+    - cron: "0 2 2 * 1"
+
+  workflow_dispatch:
+
+
+jobs: 
+  retrainModels:
+    name: Retraining models
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Train models
+        run: python src/train.py
+
+      - name: Evaluate models
+        run: python src/evaluate.py
+
+      - name: Print in console
+        run: |
+          echo "Summary metrics from evaluation" >> $GITHUB_STEP_SUMMARY
+          cat metrics/metrics.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload artifacts / metrics
+        uses: actions/upload-artifact@v4
+        if: success()
+        with: 
+          name: report from training
+          path: |
+            metrics/
+            models/
+
+          retention-days: 10
