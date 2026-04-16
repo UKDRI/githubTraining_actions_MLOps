@@ -1,0 +1,13 @@
+model:
+  type: logistic_regression
+  C: 1.0
+  max_iter: 1000
+  random_state: 42
+
+data:
+  url: "https://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/parkinsons.data"
+  filepath: "data/parkinsons.csv"
+  target: "status"
+  drop_cols: ["name"]
+  test_size: 0.2
+  random_state: 42
