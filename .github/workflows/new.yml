@@ -3,8 +3,6 @@ name: Template for retraining models
 on:
   push: 
     branches: ["**"]
-    paths: 
-      - "data/**"
 
   schedule:
     - cron: "0 2 2 * 1"
